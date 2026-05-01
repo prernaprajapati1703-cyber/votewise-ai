@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as MythRouteImport } from './routes/myth'
 import { Route as ImproveRouteImport } from './routes/improve'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as IndexRouteImport } from './routes/index'
 
+const QuizRoute = QuizRouteImport.update({
+  id: '/quiz',
+  path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MythRoute = MythRouteImport.update({
   id: '/myth',
   path: '/myth',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/guide': typeof GuideRoute
   '/improve': typeof ImproveRoute
   '/myth': typeof MythRoute
+  '/quiz': typeof QuizRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/guide': typeof GuideRoute
   '/improve': typeof ImproveRoute
   '/myth': typeof MythRoute
+  '/quiz': typeof QuizRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,14 @@ export interface FileRoutesById {
   '/guide': typeof GuideRoute
   '/improve': typeof ImproveRoute
   '/myth': typeof MythRoute
+  '/quiz': typeof QuizRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/chat' | '/guide' | '/improve' | '/myth'
+  fullPaths: '/' | '/chat' | '/guide' | '/improve' | '/myth' | '/quiz'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chat' | '/guide' | '/improve' | '/myth'
-  id: '__root__' | '/' | '/chat' | '/guide' | '/improve' | '/myth'
+  to: '/' | '/chat' | '/guide' | '/improve' | '/myth' | '/quiz'
+  id: '__root__' | '/' | '/chat' | '/guide' | '/improve' | '/myth' | '/quiz'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,10 +86,18 @@ export interface RootRouteChildren {
   GuideRoute: typeof GuideRoute
   ImproveRoute: typeof ImproveRoute
   MythRoute: typeof MythRoute
+  QuizRoute: typeof QuizRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/quiz': {
+      id: '/quiz'
+      path: '/quiz'
+      fullPath: '/quiz'
+      preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/myth': {
       id: '/myth'
       path: '/myth'
@@ -125,6 +142,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuideRoute: GuideRoute,
   ImproveRoute: ImproveRoute,
   MythRoute: MythRoute,
+  QuizRoute: QuizRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
