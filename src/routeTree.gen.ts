@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MythRouteImport } from './routes/myth'
+import { Route as ImproveRouteImport } from './routes/improve'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as IndexRouteImport } from './routes/index'
@@ -17,6 +18,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const MythRoute = MythRouteImport.update({
   id: '/myth',
   path: '/myth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImproveRoute = ImproveRouteImport.update({
+  id: '/improve',
+  path: '/improve',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuideRoute = GuideRouteImport.update({
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/guide': typeof GuideRoute
+  '/improve': typeof ImproveRoute
   '/myth': typeof MythRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/guide': typeof GuideRoute
+  '/improve': typeof ImproveRoute
   '/myth': typeof MythRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/guide': typeof GuideRoute
+  '/improve': typeof ImproveRoute
   '/myth': typeof MythRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/chat' | '/guide' | '/myth'
+  fullPaths: '/' | '/chat' | '/guide' | '/improve' | '/myth'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chat' | '/guide' | '/myth'
-  id: '__root__' | '/' | '/chat' | '/guide' | '/myth'
+  to: '/' | '/chat' | '/guide' | '/improve' | '/myth'
+  id: '__root__' | '/' | '/chat' | '/guide' | '/improve' | '/myth'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChatRoute: typeof ChatRoute
   GuideRoute: typeof GuideRoute
+  ImproveRoute: typeof ImproveRoute
   MythRoute: typeof MythRoute
 }
 
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/myth'
       fullPath: '/myth'
       preLoaderRoute: typeof MythRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/improve': {
+      id: '/improve'
+      path: '/improve'
+      fullPath: '/improve'
+      preLoaderRoute: typeof ImproveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guide': {
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChatRoute: ChatRoute,
   GuideRoute: GuideRoute,
+  ImproveRoute: ImproveRoute,
   MythRoute: MythRoute,
 }
 export const routeTree = rootRouteImport
