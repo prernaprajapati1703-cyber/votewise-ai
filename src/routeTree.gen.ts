@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MythRouteImport } from './routes/myth'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as IndexRouteImport } from './routes/index'
 
+const MythRoute = MythRouteImport.update({
+  id: '/myth',
+  path: '/myth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuideRoute = GuideRouteImport.update({
   id: '/guide',
   path: '/guide',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/guide': typeof GuideRoute
+  '/myth': typeof MythRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/guide': typeof GuideRoute
+  '/myth': typeof MythRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/guide': typeof GuideRoute
+  '/myth': typeof MythRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/chat' | '/guide'
+  fullPaths: '/' | '/chat' | '/guide' | '/myth'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chat' | '/guide'
-  id: '__root__' | '/' | '/chat' | '/guide'
+  to: '/' | '/chat' | '/guide' | '/myth'
+  id: '__root__' | '/' | '/chat' | '/guide' | '/myth'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChatRoute: typeof ChatRoute
   GuideRoute: typeof GuideRoute
+  MythRoute: typeof MythRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/myth': {
+      id: '/myth'
+      path: '/myth'
+      fullPath: '/myth'
+      preLoaderRoute: typeof MythRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guide': {
       id: '/guide'
       path: '/guide'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChatRoute: ChatRoute,
   GuideRoute: GuideRoute,
+  MythRoute: MythRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
