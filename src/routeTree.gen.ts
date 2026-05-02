@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MythRouteImport } from './routes/myth'
 import { Route as ImproveRouteImport } from './routes/improve'
 import { Route as GuideRouteImport } from './routes/guide'
@@ -20,6 +21,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MythRoute = MythRouteImport.update({
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/guide': typeof GuideRoute
   '/improve': typeof ImproveRoute
   '/myth': typeof MythRoute
+  '/profile': typeof ProfileRoute
   '/quiz': typeof QuizRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/guide': typeof GuideRoute
   '/improve': typeof ImproveRoute
   '/myth': typeof MythRoute
+  '/profile': typeof ProfileRoute
   '/quiz': typeof QuizRoute
 }
 export interface FileRoutesById {
@@ -79,13 +87,30 @@ export interface FileRoutesById {
   '/guide': typeof GuideRoute
   '/improve': typeof ImproveRoute
   '/myth': typeof MythRoute
+  '/profile': typeof ProfileRoute
   '/quiz': typeof QuizRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/chat' | '/guide' | '/improve' | '/myth' | '/quiz'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/chat'
+    | '/guide'
+    | '/improve'
+    | '/myth'
+    | '/profile'
+    | '/quiz'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/chat' | '/guide' | '/improve' | '/myth' | '/quiz'
+  to:
+    | '/'
+    | '/auth'
+    | '/chat'
+    | '/guide'
+    | '/improve'
+    | '/myth'
+    | '/profile'
+    | '/quiz'
   id:
     | '__root__'
     | '/'
@@ -94,6 +119,7 @@ export interface FileRouteTypes {
     | '/guide'
     | '/improve'
     | '/myth'
+    | '/profile'
     | '/quiz'
   fileRoutesById: FileRoutesById
 }
@@ -104,6 +130,7 @@ export interface RootRouteChildren {
   GuideRoute: typeof GuideRoute
   ImproveRoute: typeof ImproveRoute
   MythRoute: typeof MythRoute
+  ProfileRoute: typeof ProfileRoute
   QuizRoute: typeof QuizRoute
 }
 
@@ -114,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/quiz'
       fullPath: '/quiz'
       preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/myth': {
@@ -168,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuideRoute: GuideRoute,
   ImproveRoute: ImproveRoute,
   MythRoute: MythRoute,
+  ProfileRoute: ProfileRoute,
   QuizRoute: QuizRoute,
 }
 export const routeTree = rootRouteImport
