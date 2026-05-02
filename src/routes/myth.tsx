@@ -7,6 +7,7 @@ import { ShieldAlert, Search } from "lucide-react";
 import { checkMyth } from "@/server/ai.functions";
 import { AIResponse } from "@/components/ai-response";
 import { VoiceButton } from "@/components/voice-button";
+import { RequireAuth } from "@/components/require-auth";
 
 export const Route = createFileRoute("/myth")({
   head: () => ({
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/myth")({
       { name: "description", content: "Check election claims and rumors. Get a fair, sourced verdict in seconds." },
     ],
   }),
-  component: MythPage,
+  component: () => <RequireAuth><MythPage /></RequireAuth>,
 });
 
 const SAMPLES = [
