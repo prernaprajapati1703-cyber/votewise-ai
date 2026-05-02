@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { Vote, LogOut, LogIn } from "lucide-react";
+import { Vote, LogOut, LogIn, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
@@ -65,9 +65,13 @@ export function SiteHeader() {
         <div className="hidden md:flex items-center gap-2">
           {!loading && user ? (
             <>
-              <span className="text-xs text-muted-foreground max-w-[140px] truncate">
+              <Link
+                to="/profile"
+                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-ink max-w-[160px] truncate"
+              >
+                <User className="size-3.5" />
                 {user.email}
-              </span>
+              </Link>
               <Button variant="ghost" size="sm" onClick={signOut}>
                 <LogOut className="size-4" /> Sign out
               </Button>
@@ -101,12 +105,20 @@ export function SiteHeader() {
             );
           })}
           {!loading && user ? (
-            <button
-              onClick={signOut}
-              className="px-3 py-1.5 text-xs rounded-full whitespace-nowrap bg-ink text-primary-foreground"
-            >
-              Sign out
-            </button>
+            <>
+              <Link
+                to="/profile"
+                className="px-3 py-1.5 text-xs rounded-full whitespace-nowrap text-muted-foreground bg-muted"
+              >
+                Profile
+              </Link>
+              <button
+                onClick={signOut}
+                className="px-3 py-1.5 text-xs rounded-full whitespace-nowrap bg-ink text-primary-foreground"
+              >
+                Sign out
+              </button>
+            </>
           ) : !loading ? (
             <Link
               to="/auth"

@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { BookOpenCheck, GraduationCap, Sparkles, UserPlus, UsersRound, Plane, Accessibility } from "lucide-react";
 import { getGuide } from "@/server/ai.functions";
 import { AIResponse } from "@/components/ai-response";
+import { RequireAuth } from "@/components/require-auth";
 
 export const Route = createFileRoute("/guide")({
   head: () => ({
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/guide")({
       { name: "description", content: "Personalized step-by-step voting guides for first-time voters, students, seniors, NRIs, and more." },
     ],
   }),
-  component: GuidePage,
+  component: () => <RequireAuth><GuidePage /></RequireAuth>,
 });
 
 const PROFILES = [
