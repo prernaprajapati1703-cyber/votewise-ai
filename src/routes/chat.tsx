@@ -147,8 +147,11 @@ function ChatPage() {
       role: "assistant",
       content: res.data,
     });
-    // bump conversation updated_at by touching it
-    await supabase.from("conversations").update({ title: messages.length === 0 ? message.slice(0, 60) : undefined }).eq("id", convoId);
+    // Bump conversation updated_at so it sorts to the top
+    await supabase
+      .from("conversations")
+      .update({ updated_at: new Date().toISOString() })
+      .eq("id", convoId);
   };
 
   return (
