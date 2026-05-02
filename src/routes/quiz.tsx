@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Brain, Check, X, RotateCcw, Sparkles } from "lucide-react";
 import { generateQuiz } from "@/server/ai.functions";
+import { RequireAuth } from "@/components/require-auth";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/quiz")({
   head: () => ({
@@ -13,19 +16,21 @@ export const Route = createFileRoute("/quiz")({
       { name: "description", content: "5 questions on Indian elections. Test what you know." },
     ],
   }),
-  component: QuizPage,
+  component: () => <RequireAuth><QuizPage /></RequireAuth>,
 });
 
 type Q = { question: string; options: string[]; answer: number; explanation: string };
 
 function QuizPage() {
   const fetchQuiz = useServerFn(generateQuiz);
+  const { user } = useAuth();
   const [questions, setQuestions] = useState<Q[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
+  const [savedAttempt, setSavedAttempt] = useState(false);
 
   const start = async () => {
     setLoading(true);
@@ -49,9 +54,27 @@ function QuizPage() {
 
   const next = () => {
     if (!questions) return;
-    if (idx + 1 >= questions.length) { setDone(true); return; }
+    if (idx + 1 >= questions.length) {
+      setDone(true);
+      void saveAttempt();
+      return;
+    }
     setIdx(idx + 1);
     setPicked(null);
+  };
+
+  const saveAttempt = async () => {
+    if (!user || !questions || savedAttempt) return;
+    setSavedAttempt(true);
+    const { error } = await supabase.from("quiz_attempts").insert({
+      user_id: user.id,
+      score,
+      total: questions.length,
+    });
+    if (error) {
+      console.error("Failed to save attempt:", error);
+      setSavedAttempt(false);
+    }
   };
 
   return (
