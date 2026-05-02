@@ -7,6 +7,7 @@ import { Wand2 } from "lucide-react";
 import { improvePrompt } from "@/server/ai.functions";
 import { AIResponse } from "@/components/ai-response";
 import { VoiceButton } from "@/components/voice-button";
+import { RequireAuth } from "@/components/require-auth";
 
 export const Route = createFileRoute("/improve")({
   head: () => ({
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/improve")({
       { name: "description", content: "Turn a messy question into a sharp, well-structured AI prompt." },
     ],
   }),
-  component: ImprovePage,
+  component: () => <RequireAuth><ImprovePage /></RequireAuth>,
 });
 
 function ImprovePage() {
