@@ -1,6 +1,10 @@
-import { Link, useLocation } from "@tanstack/react-router";
-import { Vote } from "lucide-react";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { Vote, LogOut, LogIn } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -13,6 +17,14 @@ const NAV = [
 
 export function SiteHeader() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    toast.success("Signed out");
+    navigate({ to: "/" });
+  };
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/75 border-b border-border/60">
       <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between gap-4">
@@ -50,6 +62,24 @@ export function SiteHeader() {
             );
           })}
         </nav>
+        <div className="hidden md:flex items-center gap-2">
+          {!loading && user ? (
+            <>
+              <span className="text-xs text-muted-foreground max-w-[140px] truncate">
+                {user.email}
+              </span>
+              <Button variant="ghost" size="sm" onClick={signOut}>
+                <LogOut className="size-4" /> Sign out
+              </Button>
+            </>
+          ) : !loading ? (
+            <Button asChild size="sm" className="gradient-primary text-primary-foreground">
+              <Link to="/auth">
+                <LogIn className="size-4" /> Sign in
+              </Link>
+            </Button>
+          ) : null}
+        </div>
       </div>
       {/* Mobile nav */}
       <div className="md:hidden border-t border-border/60 overflow-x-auto">
@@ -70,6 +100,21 @@ export function SiteHeader() {
               </Link>
             );
           })}
+          {!loading && user ? (
+            <button
+              onClick={signOut}
+              className="px-3 py-1.5 text-xs rounded-full whitespace-nowrap bg-ink text-primary-foreground"
+            >
+              Sign out
+            </button>
+          ) : !loading ? (
+            <Link
+              to="/auth"
+              className="px-3 py-1.5 text-xs rounded-full whitespace-nowrap bg-ink text-primary-foreground"
+            >
+              Sign in
+            </Link>
+          ) : null}
         </div>
       </div>
     </header>
