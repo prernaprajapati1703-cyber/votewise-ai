@@ -61,7 +61,7 @@ function AuthPage() {
     }
     setLoading(true);
     const redirectUrl = `${window.location.origin}/`;
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
       options: {
@@ -69,8 +69,8 @@ function AuthPage() {
         data: { display_name: parsed.data.displayName },
       },
     });
-    setLoading(false);
     if (error) {
+      setLoading(false);
       if (error.message.toLowerCase().includes("already")) {
         toast.error("That email is already registered. Try signing in.");
       } else {
@@ -78,9 +78,26 @@ function AuthPage() {
       }
       return;
     }
-    toast.success("Account created! Check your email to confirm, then sign in.");
-    setTab("signin");
-    setSiEmail(parsed.data.email);
+    if (data.session) {
+      setLoading(false);
+      toast.success("Welcome! Account created.");
+      navigate({ to: "/" });
+      return;
+    }
+    // Fallback: try password sign-in (auto-confirm enabled)
+    const { error: signInErr } = await supabase.auth.signInWithPassword({
+      email: parsed.data.email,
+      password: parsed.data.password,
+    });
+    setLoading(false);
+    if (signInErr) {
+      toast.success("Account created! Please sign in.");
+      setTab("signin");
+      setSiEmail(parsed.data.email);
+      return;
+    }
+    toast.success("Welcome!");
+    navigate({ to: "/" });
   };
 
   const handleSignIn = async (e: React.FormEvent) => {
