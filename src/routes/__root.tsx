@@ -34,10 +34,14 @@ export const Route = createRootRoute({
       { title: "VoteSmart AI — Your AI Election Companion for India" },
       { name: "description", content: "Ask questions, bust myths, get personalized voting guides, and quiz yourself on Indian elections — powered by AI." },
       { name: "author", content: "VoteSmart AI" },
-      { property: "og:title", content: "VoteSmart AI" },
-      { property: "og:description", content: "Your AI election companion for India." },
+      { property: "og:title", content: "VoteSmart AI — Your AI Election Companion for India" },
+      { property: "og:description", content: "Ask questions, bust myths, get personalized voting guides, and quiz yourself on Indian elections — powered by AI." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "VoteSmart AI — Your AI Election Companion for India" },
+      { name: "twitter:description", content: "Ask questions, bust myths, get personalized voting guides, and quiz yourself on Indian elections — powered by AI." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/764cea31-b484-41f6-8b40-2185051f4823" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/764cea31-b484-41f6-8b40-2185051f4823" },
     ],
     links: [
       {
